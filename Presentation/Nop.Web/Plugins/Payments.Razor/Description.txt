@@ -1,0 +1,9 @@
+Group: Payment methods
+FriendlyName: Razor
+SystemName: Payments.Razor
+Version: 1.00
+SupportedVersions: 3.90
+Author: Halai Group
+DisplayOrder: 1
+FileName: Nop.Plugin.Payments.Razor.dll
+Description: Collect payments online through credit card, debit card, netbanking and popular wallets

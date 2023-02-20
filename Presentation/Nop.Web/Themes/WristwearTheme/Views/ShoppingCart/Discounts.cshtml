@@ -1,0 +1,64 @@
+﻿@model ShoppingCartModel.DiscountBoxModel
+@using Nop.Web.Models.ShoppingCart;
+
+
+
+
+<div class="discount-button">
+    <input type="button" name="applydiscountcode" id="applydiscount" value="@T("ShoppingCart.DiscountCouponCode.Button")" class="btn btn-info btn-lg" data-toggle="modal" data-target="#CouponPopUp" />
+    <div class="discount-button-images">
+        <img src="~/Content/Images/Coupon.png" class="coupon-img" />
+        <img src="~/Content/Images/Coupon_Right.png" class="coupon-img-right-side" />
+    </div>
+</div>
+<div class="modal cart-popup-wrapper fade Coupon-Pop-Up" data-cart-popup-wrapper role="dialog" aria-labelledby="myModalLabel" id="CouponPopUp" data-backdrop="false" style="display:none">
+
+</div>
+
+<!--<div class="message-Coupon-code">
+    foreach (var message in Model.Messages)
+    {
+        <div class="(Model.IsApplied ? "message bg-success" : "message bg-danger")">
+            message
+        </div>
+    }
+    foreach (var discount in Model.AppliedDiscountsWithCodes)
+    {
+        <div class="current-code">
+            <span class="applied-discount-code bg-success">
+                string.Format(T("ShoppingCart.DiscountCouponCode.CurrentCode").Text, discount.CouponCode)-->
+                @*empty value (little hack for FormValueExistsAttribute)*@
+                <!--<input type="submit" name="removediscount-discount.Id" value=" " title="T("Common.Remove")" class="remove-discount-button">
+            </span>
+        </div>
+    }
+</div>-->
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $('#applydiscount').click(function () {
+            $.ajax({
+                type: "GET",
+                url: "/ShoppingCart/GetDiscounts",
+                dataType: "json",
+                contentType: 'application/json; charset=utf-8',
+                success: function (data) {
+                    if (data.status == "Success") {
+                        //debugger;
+                        $('#CouponPopUp').show();
+                        $("#CouponPopUp").html(data.html);
+                    } else {
+                        alert("Error occurs on the Database level!");
+                    }
+                },
+                error: function () {
+                    alert("An error has occured!!!");
+                }
+            });
+        });
+    });
+
+</script>

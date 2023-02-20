@@ -1,0 +1,236 @@
+﻿@model CheckoutPaymentMethodModel
+@using Nop.Web.Models.Checkout;
+<div class="checkout-data">
+
+    @if (Model.Warnings.Count > 0)
+    {
+        <div class="section confirm-order">
+            @*@if (!string.IsNullOrEmpty(Model.MinOrderTotalWarning))
+                {
+                    <div>
+                        <span class="min-order-warning">@Model.MinOrderTotalWarning</span>
+                    </div>
+                }*@
+            @if (Model.Warnings.Count > 0)
+            {
+                <div class="message-error">
+                    <ul>
+                        @foreach (var warning in Model.Warnings)
+                        {
+                            <li>@warning</li>
+                        }
+                    </ul>
+                </div>
+            }
+        </div>
+    }
+
+
+    @Html.Widget("op_checkout_payment_method_top")
+    <div class="section payment-method">
+
+        @if (Model.DisplayRewardPoints && Model.PaymentMethods.Count > 0)
+        {
+            <div class="use-reward-points">
+                <label class="checkbox">
+                    @Html.CheckBoxFor(x => x.UseRewardPoints, Model.RewardPointsEnoughToPayForOrder ? new { @onclick = "PaymentMethod.toggleUseRewardPoints(this)" } : null)
+                    @string.Format(T("Checkout.UseRewardPoints").Text, Model.RewardPointsBalance, Model.RewardPointsAmount)
+                    @if (Model.RewardPointsEnoughToPayForOrder)
+                    {
+                        <script type="text/javascript">
+                        $(document).ready(function() {
+                            PaymentMethod.toggleUseRewardPoints($('#@Html.FieldIdFor(model => model.UseRewardPoints)'));
+                        });
+                        </script>
+                    }
+                </label>
+            </div>
+        }
+        @if (ViewBag.codMessages != null && ViewBag.codMessages.Count > 0)
+        {
+            <b>NOTE: @T(" Cash on delivery is not applicable due to below reasons:")</b><br />
+            foreach (var item in ViewBag.codMessages)
+            {
+                if (item == "1")
+                {
+                    @T("One of product in your cart is not supporting COD")
+                }
+                if (item == "2")
+                {
+                    @T("COD is not available at given shipping address")
+                }
+                if (item == "3")
+                {
+                    @T("COD is not allowed for orders with cart value more than 1500")
+                }
+            }
+        }
+        @if (Model.PaymentMethods.Count > 0)
+        {
+            <ul class="method-list" id="payment-method-block" style="margin-top:15px;">
+                @for (int i = 0; i < Model.PaymentMethods.Count; i++)
+                {
+                    var paymentMethod = Model.PaymentMethods[i];
+                    var paymentMethodName = paymentMethod.Name;
+                    if (!String.IsNullOrEmpty(paymentMethod.Fee))
+                    {
+                        paymentMethodName = T("Checkout.SelectPaymentMethod.MethodAndFee", paymentMethodName, paymentMethod.Fee).Text;
+                    }
+                    if (paymentMethod.Selected)
+                    {
+                        <input type="hidden" name="selectedPaymentMethod" id="selectedPaymentMethod" value="@paymentMethod.Fee" />
+                    }
+                    <li>
+                        <div class="method-name">
+                            @if (!String.IsNullOrEmpty(paymentMethod.LogoUrl))
+                            {
+                                <div class="payment-logo">
+                                    <label for="paymentmethod_@(i)">
+                                        <img src="@paymentMethod.LogoUrl" alt="@paymentMethodName" />
+                                    </label>
+                                </div>
+                            }
+                            <div class="payment-details">
+                                <input id="paymentmethod_@(i)" type="radio" name="paymentmethod" value="@(paymentMethod.PaymentMethodSystemName)" checked="@paymentMethod.Selected" onclick="paymentMethodChanged('@paymentMethod.Fee');" />
+                                <label for="paymentmethod_@(i)">@paymentMethodName</label>
+                                @if (!string.IsNullOrEmpty(paymentMethod.Description))
+                                {
+                                    <div class="payment-description">@paymentMethod.Description</div>
+                                }
+                            </div>
+                        </div>
+                    </li>
+                }
+            </ul>
+
+            @*<div>
+                                <b>Total: </b>
+                                var a = $(".order-total")[0];
+                var b = a.children[0].innerText;
+                parseInt(b);
+                            </div>*@
+        }
+        else
+        {
+            <div class="message-error">
+                @T("Checkout.NoPaymentMethods")
+            </div>
+        }
+    </div>
+    @Html.Widget("op_checkout_payment_method_bottom")
+</div>
+
+<div class="Order-table-payment-method">
+    @Html.Action("OrderTotals", "ShoppingCart", new { isEditable = false })
+</div>
+
+<style>
+    .payment-logo {
+        width: 9% !important;
+    }
+
+    .payment-details {
+        width: 90% !important;
+    }
+
+    .payment-logo img {
+        width: 53px !important;
+        margin-left: 33px;
+    }
+
+    @@media(max-width:961px) {
+        .payment-logo img {
+            width: 53px !important;
+            margin-left: 7px;
+        }
+
+        .payment-logo {
+            float: left !important;
+            display: block !important;
+        }
+        /* .payment-details {
+            width: 79% !important;
+        }*/
+
+        .payment-method-main {
+            width: 100% !important;
+            display: block;
+            float: left;
+        }
+
+        .payment-description {
+            display: block;
+            float: left;
+            width: 100%;
+        }
+    }
+
+    @@media(max-width:400px) {
+        .payment-logo {
+            width: 21% !important;
+        }
+
+        .payment-details {
+            width: 79% !important;
+        }
+    }
+
+    @@media(min-width:401px) and (max-width:600px) {
+        .payment-logo {
+            width: 15% !important;
+        }
+
+        .payment-details {
+            width: 79% !important;
+        }
+    }
+
+    @@media(min-width:601px) and (max-width:800px) {
+        .payment-logo {
+            width: 11% !important;
+        }
+
+        .payment-details {
+            width: 85% !important;
+        }
+    }
+</style>
+
+@*Order total in payment method*@
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".use-reward-points").hide();
+        if ($("#selectedPaymentMethod").length > 0) {
+            var fees = $("#selectedPaymentMethod").val();
+            $("#Shipping")[0].innerHTML = fees;
+            var totalFirstPart = $(".order-total")[0].innerHTML.trim().split(" ")[0];
+            var replaceComa = $("#orderTotalHidden").val().trim().split(" ")[1];
+            s = replaceComa.indexOf(",") ? replaceComa.replace(",", "") : replaceComa;
+            var Rupeessymbol = $("#orderTotalHidden").val().trim().split(" ")[0];
+            var afterpointnumber = replaceComa.toString().split(".")[1];
+            var totalValue = parseInt(s) + parseInt(fees.indexOf("₹") > -1 ? fees.split("₹")[1] : fees);
+            if (isNaN(totalValue)) {
+                $(".order-total")[0].innerHTML = Rupeessymbol + " " + s;
+            }
+            else {
+                $(".order-total")[0].innerHTML = Rupeessymbol + " " + totalValue + "." + afterpointnumber;
+            }
+        }
+    });
+    /*Order total in payment method*/
+    function paymentMethodChanged(fees) {
+        $("#Shipping")[0].innerHTML = fees;
+        var totalFirstPart = $(".order-total")[0].innerHTML.trim().split(" ")[0];
+        var replaceComa = $("#orderTotalHidden").val().trim().split(" ")[1];
+        s = replaceComa.indexOf(",") ? replaceComa.replace(",", "") : replaceComa;
+        var Rupeessymbol = $("#orderTotalHidden").val().trim().split(" ")[0];
+        var afterpointnumber = replaceComa.toString().split(".")[1];
+        var totalValue = parseInt(s) + parseInt(fees.indexOf("₹") > -1 ? fees.split("₹")[1] : fees);
+        if (isNaN(totalValue)) {
+            $(".order-total")[0].innerHTML = Rupeessymbol + " " + s;
+        }
+        else {
+            $(".order-total")[0].innerHTML = Rupeessymbol + " " + totalValue + "." + afterpointnumber;
+        }
+    }
+</script>

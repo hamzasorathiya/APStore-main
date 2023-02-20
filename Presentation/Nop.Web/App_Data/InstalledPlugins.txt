@@ -1,0 +1,17 @@
+Payments.CashOnDelivery
+DiscountRequirement.HasOneProduct
+DiscountRequirement.MustBeAssignedToCustomerRole
+CurrencyExchange.ECB
+ExternalAuth.Facebook
+Payments.CheckMoneyOrder
+Payments.PayPalDirect
+Payments.Manual
+Payments.PayPalStandard
+Payments.PurchaseOrder
+Payments.Razor
+Widgets.GoogleAnalytics
+Shipping.AustraliaPost
+Shipping.FixedOrByWeight
+Widgets.NivoSlider
+Shipping.FedEx
+Misc.Picker

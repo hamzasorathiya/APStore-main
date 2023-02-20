@@ -1,0 +1,329 @@
+﻿@model Nop.Web.Models.Customer.LoginModel
+@using Nop.Core;
+@using Nop.Core.Infrastructure
+
+@*@inject Nop.Core.Domain.Security.CaptchaSettings captchasetting;
+    @inject IWebHelper webHelper*@
+@{
+    string returnUrl = ViewBag.ReturnUrl;
+    //Model.DisplayCaptcha = captchasetting.Enabled && captchasetting.ShowOnLoginPage;
+    var webHelper = EngineContext.Current.Resolve<IWebHelper>();
+    var registerUrl = Url.RouteUrl("Register");
+
+    var uri = new Uri(webHelper.GetStoreLocation() + returnUrl);
+    var loginUrl = @Url.RouteUrl("Login");
+    //var queryParams = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+    //if (queryParams != null && queryParams.Any())
+    //{
+    //    if (queryParams.ContainsKey(returnUrl))
+    //    {
+    //        returnUrl = Convert.ToString(queryParams["returnUrl"]);
+    //        if (!string.IsNullOrWhiteSpace(returnUrl))
+    //        {
+    //            registerUrl = $"{registerUrl}?returnUrl={returnUrl}";
+    //        }
+    //        else
+    //        {
+    //            returnUrl = "/";
+    //        }
+    //    }
+    //    else
+    //    {
+    //        registerUrl = $"{registerUrl}?returnUrl={System.Web.HttpUtility.HtmlDecode(returnUrl)}";
+    //        returnUrl = System.Web.HttpUtility.HtmlDecode(returnUrl);
+    //    }
+
+    //}
+    //else
+    //{
+    //    if (returnUrl != Url.RouteUrl("HomePage"))
+    //    {
+    //        if (returnUrl == registerUrl)
+    //        {
+    //            returnUrl = "/";
+    //        }
+    //        else
+    //        {
+    //            registerUrl = $"{registerUrl}?returnUrl={returnUrl}";
+    //        }
+    //    }
+    //}
+
+}
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<div class="login-modal modal login-page" id="loginmodal" role="dialog">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <a href="#" data-dismiss="modal" class="close modal-close"></a>
+            <div class="modal-body">
+                <div class="customer-blocks">
+                    <div class="login-wrap">
+                        <div class="login-wrapper">
+                            <div class="returning-wrapper">
+
+                                <input id="cart-guest-checkout-button" type="button" class="btn btn-primary" style="margin-bottom: 25px; width: 100%; height: 40px;" onclick="location.href='/checkout'" value="CHEKOUT AS GUEST">
+
+                                <fieldset>
+                                    <legend id="form-title">Sign In</legend>
+                                    <div class="form-fields form-horizontal">
+                                        @using (Html.BeginForm("Login", "Customer", FormMethod.Post, new { @id = "login-popup-form" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            <div class="message-error alert alert-danger validation-summary-errors ajax-error d-none">
+                                            </div>
+                                            if (Model.UsernamesEnabled)
+                                            {
+                                                <div class="form-group">
+                                                    @*<label class="col-xs-12 col-sm-12 col-md-12 control-label" asp-for="Username" asp-postfix=""></label>
+                                                        <div class="col-md-12">
+                                                            <input asp-for="Username" class="username form-control" autofocus="autofocus" autocomplete="off" />
+                                                            <span asp-validation-for="Username"></span>
+                                                        </div>*@
+                                                    @Html.LabelFor(m => m.Username, new { @class = "col-xs-12 col-sm-12 col-md-12 control-label" })
+                                                    <div class="col-md-12">
+                                                        @Html.TextBoxFor(m => m.Username, new { @class = "username form-control", autofocus = "autofocus" })
+                                                        @Html.ValidationMessageFor(m => m.Username)
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="form-group">
+                                                    @*<label class="col-xs-12 col-sm-12 col-md-12 control-label" asp-for="Email" asp-postfix="">Email</label>
+                                                        <div class="col-md-12">
+                                                            <input asp-for="Email" class="email form-control" autofocus="autofocus" autocomplete="off" />
+                                                            <span asp-validation-for="Email"></span>
+                                                        </div>*@
+                                                    @Html.LabelFor(m => m.Email, new { @class = "col-xs-12 col-sm-12 col-md-12 control-label" })
+                                                    <div class="col-md-12">
+                                                        @Html.TextBoxFor(m => m.Email, new { @class = "email form-control", autofocus = "autofocus" })
+                                                        @Html.ValidationMessageFor(m => m.Email)
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="form-group">
+                                                @*<label class="col-xs-12 col-sm-12 col-md-12 control-label" asp-for="Password" asp-postfix="">Password</label>
+                                                    <div class="col-md-12">
+                                                        <input asp-for="Password" class="password form-control" autocomplete="new-password" />
+                                                        <span asp-validation-for="Password"></span>
+                                                    </div>*@
+                                                @Html.LabelFor(m => m.Password, new { @class = "col-xs-12 col-sm-12 col-md-12 control-label" })
+                                                <div class="col-md-12">
+                                                    @Html.PasswordFor(m => m.Password, new { @class = "password form-control" })
+                                                    @Html.ValidationMessageFor(m => m.Password)
+                                                </div>
+                                            </div>
+                                            @*</div>*@
+                                            <div class="form-group">
+                                                <div class="remember-me">
+                                                    <div class="checkbox">
+                                                        @*<input class="checkbox" checked type="checkbox" data-val="true" asp-for="RememberMe" data-val-required="The Remember me? field is required." id="RememberMeModal" name="RememberMe" value="true" />
+                                                            <label class="remember-text" for="RememberMeModal" asp-for="RememberMe">Remember me?</label>
+                                                            <span class="forgot-password">
+                                                                <a id="login-forgotPassword" asp-route="PasswordRecovery">Forgot password</a>
+                                                            </span>*@
+                                                        @Html.CheckBoxFor(m => m.RememberMe, new { @class = "checkbox" })
+                                                        @Html.LabelFor(m => m.RememberMe, new { @class = "remember-text" })
+
+                                                        <span class="forgot-password">
+                                                            @Html.RouteLink(T("Account.Login.ForgotPassword").Text, "PasswordRecovery")
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            if (Model.DisplayCaptcha)
+                                            {
+                                                <div class="form-group">
+                                                    <div class="captcha-box">
+                                                        @*<nop-captcha />*@
+                                                        @Html.Raw(Html.GenerateCaptcha())
+                                                    </div>
+                                                </div>
+                                            }
+                                            <div class="form-group form-btn">
+                                                <div class="col-md-12">
+                                                    <input id="btnlogin" class="btn btn-primary login-button btn-primary-custom btn-block" type="submit" value="@T("Account.Login.LoginButton")" />
+                                                </div>
+                                            </div>
+                                        }
+                                        @*<form id="login-popup-form" asp-route="Login" asp-route-returnurl="@loginUrl" method="post" autocomplete="off">
+                                            </form>*@
+                                    </div>
+                                </fieldset>
+                                <div class="external-authentication">
+                                    @*@await Component.InvokeAsync("ExternalMethods", "ExternalAuthentication")*@
+                                    @*@T("Account.Login.DontHaveAnAccount")*@
+                                    Don't have an account?
+                                    <a id="login-ForRegister" href="@registerUrl" class="ico-login">Sign Up</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+
+</script>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+
+        $("#btnlogin").on('click', function () {
+            var isCaptcha = false;
+            if ("@Model.DisplayCaptcha.ToString().ToLower()" == "true") {
+                isCaptcha = true;
+            }
+            var token = $('input[name="__RequestVerificationToken"]').val();
+            @*var captchakey = '@captchasetting.ReCaptchaPublicKey';
+            var captchatheme = '@captchasetting.ReCaptchaTheme';*@
+            $(".ajax-error").empty();
+            $(".ajax-error").addClass("d-none");
+            if ($('#login-popup-form').valid()) {
+                $("#div-btnlogin").addClass('div-disabled');
+                $('#btnlogin').prop('disabled', true);
+                $(".ajax-loading-block-window").fadeIn();
+                $.ajax({
+                    cache: false,
+                    url: "@Url.RouteUrl("AjaxLoginCheck", new { returnUrl = @returnUrl})",
+                    data: $('#login-popup-form').serialize(),
+                    type: "POST",
+                    success: function (data, textStatus, jqXHR) {
+                        $(".ajax-error").empty();
+                        $(".ajax-loading-block-window").fadeOut();
+                        if (data.Errors != null && data.Errors.length > 0) {
+
+                            $("#login-popup-form .captcha-box div").remove('');
+                            //setTimeout(function () {
+                            //    $("#login-popup-form .captcha-box").append("<div class='captcha-reloded' id='captcha-reloded'></div>");
+                            //    grecaptcha.render('captcha-reloded', { 'sitekey': captchakey, 'theme': captchatheme });
+                            //}, 100);
+
+                            var error = "@T("Account.Login.Unsuccessful")";
+                            $.each(data.Errors, function (v, i) {
+                                error += "<ul><li>" + i + "</li></ul>";
+                            })
+                            var errorMessge = error.replace("<ul><li>", "").replace("</li></ul>", "");
+                            //if (isCaptcha) {
+                            //    for (i = 0; i < ___grecaptcha_cfg.count; i++) {
+                            //        grecaptcha.reset(i)
+                            //    }
+                            //}
+
+                            $(".ajax-error").append(error);
+                            $(".ajax-error").removeClass("d-none");
+                            $("#div-btnlogin").removeClass('div-disabled');
+                            $('#btnlogin').prop('disabled', false);
+                            $('#loginmodal').scrollTop(0);
+                        }
+                        else {
+                            var retur = data.RedirectURL;
+                            if (retur != null && retur.indexOf('/') == 0) {
+                                retur = retur.replaceAt(0, '');
+                            }
+                            if (retur != "/") {
+                                window.location.href = "@webHelper.GetStoreLocation(true)" + retur;
+                            } else {
+                                window.location.href = "@webHelper.GetStoreLocation(true)";
+                            }
+                        }
+                    }
+                });
+            }
+        });
+        $(".sign-in-btn").on('click', function () {
+            $(".ajax-error").empty();
+            $(".ajax-error").addClass("d-none");
+        });
+        $("input").keypress(function (event) {
+            if (event.which == 13) {
+                //event.preventDefault();
+                $("form").submit();
+            }
+        });
+
+    });
+
+    String.prototype.replaceAt = function (index, replacement) {
+        return this.substr(0, index) + replacement + this.substr(index + 1);
+    }
+</script>
+
+<style>
+    @@media (max-width: 767px) {
+        .login-modal.modal .modal-dialog {
+            margin: 0 auto;
+        }
+        .login-modal .modal-content {
+            width: 95% !important;
+        }
+    }
+
+    .login-modal {
+        display: block;
+        padding-right: 0px !important;
+    }
+
+    .modal.in .modal-dialog {
+        min-height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    #cart-page .modal-backdrop {
+        z-index: 1040;
+    }
+
+    .login-modal .modal-content {
+        padding: 30px;
+        width: 100%;
+    }
+
+    .login-modal .login-wrapper {
+        margin: 0 !important;
+    }
+
+    .login-wrapper {
+        max-width: 425px !important;
+        width: 100% !important;
+        /*margin: 60px auto 20px;*/
+    }
+
+    .login-modal .login-wrapper .returning-wrapper {
+        float: none;
+        background: 0 0;
+        /*-webkit-box-shadow: none;*/
+        box-shadow: none;
+        border: 0;
+        padding: 0;
+    }
+
+    .login-modal .login-wrap {
+        /*display: -webkit-box;
+        display: -ms-flexbox;*/
+        display: flex;
+        -webkit-box-pack: center;
+        /*-ms-flex-pack: center;*/
+        justify-content: center;
+    }
+
+    .login-modal .modal-sm {
+        max-width: 400px !important;
+        width: 100% !important;
+    }
+
+    .external-authentication {
+        margin-top: 0px !important;
+    }
+
+    .main-menu.goToTop {
+        z-index: 1040 !important;
+    }
+
+    .d-none {
+        display: none !important;
+    }
+</style>
