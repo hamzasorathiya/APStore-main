@@ -7,7 +7,7 @@ namespace Nop.Web.Controllers
     {
         [NopHttpsRequirement(SslRequirement.No)]
         public virtual ActionResult Index()
-        {
+        {            
             return View();
         }
     }
