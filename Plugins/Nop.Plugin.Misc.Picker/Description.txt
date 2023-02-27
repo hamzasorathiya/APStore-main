@@ -1,9 +1,9 @@
-﻿Group: Shipping rate
-FriendlyName: Picker
+﻿Group: Courier
+FriendlyName: Pickrr Courier Service
 SystemName: Misc.Picker
-Version: 1.24
+Version: 1.0
 SupportedVersions: 3.90
 Author: nopCommerce team
 DisplayOrder: 1
 FileName: Nop.Plugin.Misc.Picker.dll
-Description: This plugin offers shipping provider
+Description: This plugin will automatically place and cancel orders on pickrr and show the trackingid to the user to track the order

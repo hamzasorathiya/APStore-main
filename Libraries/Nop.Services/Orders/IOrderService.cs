@@ -65,7 +65,7 @@ namespace Nop.Services.Orders
         /// <param name="psIds">Payment status identifiers; null to load all orders</param>
         /// <param name="ssIds">Shipping status identifiers; null to load all orders</param>
         /// <param name="billingEmail">Billing email. Leave empty to load all records.</param>
-        /// <param name="billingLastName">Billing last name. Leave empty to load all records.</param>
+        /// <param name="billingFirstName">Billing first name. Leave empty to load all records.</param>
         /// <param name="orderNotes">Search in order notes. Leave empty to load all records.</param>
         /// <param name="pageIndex">Page index</param>
         /// <param name="pageSize">Page size</param>
@@ -76,7 +76,7 @@ namespace Nop.Services.Orders
             int billingCountryId = 0, string paymentMethodSystemName = null,
             DateTime? createdFromUtc = null, DateTime? createdToUtc = null,
             List<int> osIds = null, List<int> psIds = null, List<int> ssIds = null,
-            string billingEmail = null, string billingLastName = "", 
+            string billingEmail = null, string billingFirstName = "", 
             string orderNotes = null, int pageIndex = 0, int pageSize = int.MaxValue);
         
         /// <summary>

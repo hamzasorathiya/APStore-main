@@ -1147,7 +1147,7 @@ namespace Nop.Admin.Controllers
                 psIds: paymentStatusIds,
                 ssIds: shippingStatusIds,
                 billingEmail: model.BillingEmail,
-                billingLastName: model.BillingLastName,
+                billingFirstName: model.BillingFirstName,
                 billingCountryId: model.BillingCountryId,
                 orderNotes: model.OrderNotes,
                 pageIndex: command.Page - 1,
@@ -1190,7 +1190,7 @@ namespace Nop.Admin.Controllers
                 startTimeUtc: startDateValue,
                 endTimeUtc: endDateValue,
                 billingEmail: model.BillingEmail,
-                billingLastName: model.BillingLastName,
+                billingFirstName: model.BillingFirstName,
                 billingCountryId: model.BillingCountryId,
                 orderNotes: model.OrderNotes);
 
@@ -1204,7 +1204,7 @@ namespace Nop.Admin.Controllers
                 startTimeUtc: startDateValue,
                 endTimeUtc: endDateValue,
                 billingEmail: model.BillingEmail,
-                billingLastName: model.BillingLastName,
+                billingFirstName: model.BillingFirstName,
                 billingCountryId: model.BillingCountryId,
                 orderNotes: model.OrderNotes);
             var primaryStoreCurrency = _currencyService.GetCurrencyById(_currencySettings.PrimaryStoreCurrencyId);
@@ -1309,7 +1309,7 @@ namespace Nop.Admin.Controllers
                 psIds: paymentStatusIds,
                 ssIds: shippingStatusIds,
                 billingEmail: model.BillingEmail,
-                billingLastName: model.BillingLastName,
+                billingFirstName: model.BillingFirstName,
                 billingCountryId: model.BillingCountryId,
                 orderNotes: model.OrderNotes);
 
@@ -1385,7 +1385,7 @@ namespace Nop.Admin.Controllers
                 psIds: paymentStatusIds,
                 ssIds: shippingStatusIds,
                 billingEmail: model.BillingEmail,
-                billingLastName: model.BillingLastName,
+                billingFirstName: model.BillingFirstName,
                 billingCountryId: model.BillingCountryId,
                 orderNotes: model.OrderNotes);
 
@@ -1471,7 +1471,7 @@ namespace Nop.Admin.Controllers
                 psIds: paymentStatusIds,
                 ssIds: shippingStatusIds,
                 billingEmail: model.BillingEmail,
-                billingLastName: model.BillingLastName,
+                billingFirstName: model.BillingFirstName,
                 billingCountryId: model.BillingCountryId,
                 orderNotes: model.OrderNotes);
 
@@ -2117,7 +2117,7 @@ namespace Nop.Admin.Controllers
                 psIds: paymentStatusIds,
                 ssIds: shippingStatusIds,
                 billingEmail: model.BillingEmail,
-                billingLastName: model.BillingLastName,
+                billingFirstName: model.BillingFirstName,
                 billingCountryId: model.BillingCountryId,
                 orderNotes: model.OrderNotes);
 
@@ -2236,7 +2236,7 @@ namespace Nop.Admin.Controllers
                 psIds: paymentStatusIds,
                 ssIds: shippingStatusIds,
                 billingEmail: model.BillingEmail,
-                billingLastName: model.BillingLastName,
+                billingFirstName: model.BillingFirstName,
                 billingCountryId: model.BillingCountryId,
                 orderNotes: model.OrderNotes);
 

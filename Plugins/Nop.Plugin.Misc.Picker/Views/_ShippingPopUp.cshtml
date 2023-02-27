@@ -1,0 +1,320 @@
+﻿@model  Nop.Plugin.Misc.Picker.Models.ShippingInformation
+@{
+    Layout = "";
+}
+
+<div class="modal cart-popup-wrapper" id="ShippingPopUp" style="display: block;">
+    <div class="modals-dialog modal-dialog">
+        <div class="modal-content Shippingpopup">
+            <div>
+                <h2 class="Title">Order Tracking Details</h2>
+                <button type="button" class="close" id="Popupclose">X</button>
+            </div>
+            <ul style="font-size: 15px">
+                <li>
+                    @if (Model.statusinfo.Count == 0)
+                    {
+                        <div style="margin-top: 40px;">
+                            <div class="col-md-3 Icon">
+                                <div class="Status-Icon"></div>
+                                <div class="Status-Line"></div>
+                            </div>
+                            <div class="col-md-9 Picker-Status">
+                                <h3 class="Order-Status"><b>Order Processing</b></h3>
+                                <h6>Your order is processing.</h6>
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        foreach (var item in Model.statusinfo)
+                        {
+                            if (item.status_name == "OC")
+                            {
+                                <div style="margin-top: 40px;">
+                                    <div class="col-md-3 Icon">
+                                        <div class="Status-Cancel-Icon"></div>
+                                        <div class="Status-Cancel-Line"></div>
+                                    </div>
+                                    <div class="col-md-9 Picker-Cancel-Status">
+                                        <h3 class="Order-Cancel-Status"><b>@item.status_body</b></h3>
+                                        <h6>Last updated on @item.status_time</h6>
+                                        @if (item.status_name == "OC" && item.status_location == null)
+                                        {
+                                            <h6>Your order is cancelled.</h6>
+                                        }
+                                        else
+                                        {
+                                            <h6>@item.status_location</h6>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                            else
+                            {
+                                <div style="margin-top: 40px;">
+                                    <div class="col-md-3 Icon">
+                                        <div class="Status-Icon"></div>
+                                        <div class="Status-Line"></div>
+                                    </div>
+                                    <div class="col-md-9 Picker-Status">
+                                        <h3 class="Order-Status"><b>@item.status_body</b></h3>
+                                        <h6>Last updated on @item.status_time</h6>
+                                        @if (item.status_name == "OP" && item.status_location == null)
+                                        {
+                                            <h6>Your order has been successfully placed.</h6>
+                                        }
+                                        else
+                                        {
+                                            <h6>@item.status_location</h6>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        }
+                    }
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#Popupclose").click(function () {
+        $("#ShippingPopUp").hide()
+    });
+</script>
+
+
+<style>
+    /*shipping popup style to desktop device*/
+    .Shippingpopup {
+        width: 180%;
+        margin-left: -100px;
+        height: 400px;
+        overflow: scroll;
+    }
+
+    .Title {
+        text-align: center;
+        background-color: orange;
+        font-weight: 600;
+        margin-top: 0px;
+    }
+
+    .Picker-Status {
+        width: 400px;
+        height: 120px;
+        float: left;
+        margin-left: -30px;
+    }
+
+    .Icon {
+        float: left;
+        height: 120px;
+        width: 150px;
+    }
+
+    .Status-Icon {
+        height: 20px;
+        width: 20px;
+        margin-left: 50px;
+        background-color: green;
+        border-radius: 10px;
+    }
+
+    #Popupclose {
+        color: black;
+        opacity: 2.2;
+        margin-top: -35px;
+        margin-right: 10px;
+    }
+
+    .Status-Line {
+        border-right: 2px green ridge;
+        width: 0px;
+        height: 100px;
+        margin-left: 59px;
+    }
+
+    .Status-Cancel-Icon {
+        height: 20px;
+        width: 20px;
+        margin-left: 50px;
+        background-color: red;
+        border-radius: 10px;
+    }
+
+    .Status-Cancel-Line {
+        border-right: 2px red ridge;
+        width: 0px;
+        height: 100px;
+        margin-left: 59px;
+    }
+
+    .Picker-Cancel-Status {
+        width: 400px;
+        height: 120px;
+        float: left;
+        margin-left: -30px;
+    }
+
+    .Order-Status {
+        margin-top: 0;
+    }
+
+    .Order-Cancel-Status {
+        color: red;
+        margin-top: 0px;
+    }
+
+
+
+    /*shipping popup style to mobile responsive device*/
+    @@media (min-width:992px) and (max-width:1199px) {
+        .Shippingpopup {
+            margin-left: -270px;
+        }
+    }
+
+
+    @@media (max-width:767px) {
+        .Shippingpopup {
+            margin-left: 5px;
+        }
+    }
+
+
+    @@media (max-width:640px) {
+        .Shippingpopup {
+            width: 135%;
+        }
+
+        .Icon {
+            width: 100px;
+        }
+
+        .Status-Icon {
+            margin-left: 25px;
+        }
+
+        .Status-Line {
+            margin-left: 33px;
+        }
+
+        .Status-Cancel-Icon {
+            margin-left: 25px;
+        }
+
+        .Status-Cancel-Line {
+            margin-left: 33px;
+        }
+
+        .Picker-Status {
+            width: 380px;
+            margin-left: -10px;
+        }
+
+        .Picker-Cancel-Status {
+            width: 380px;
+            margin-left: -10px;
+        }
+
+        .Order-Status {
+            font-size: 20px;
+        }
+
+        .Order-Cancel-Status {
+            font-size: 20px;
+        }
+    }
+
+
+    @@media (max-width:480px) {
+        .Shippingpopup {
+            width: 100%;
+            margin-left: 20px;
+        }
+
+        .Icon {
+            width: 85px;
+        }
+
+        .Status-Icon {
+            margin-left: 18px;
+        }
+
+        .Status-Line {
+            margin-left: 27px;
+        }
+
+        .Picker-Status {
+            width: 280px;
+            margin-left: -18px;
+        }
+
+        .Status-Cancel-Icon {
+            margin-left: 18px;
+        }
+
+        .Status-Cancel-Line {
+            margin-left: 27px;
+        }
+
+        .Picker-Cancel-Status {
+            width: 280px;
+            margin-left: -18px;
+        }
+
+        .Title {
+            font-size: 23px;
+        }
+    }
+
+
+    @@media (max-width:360px) {
+        .Shippingpopup {
+            width: 90%;
+        }
+
+        .Picker-Status {
+            width: 270px;
+            margin-left: -42px;
+        }
+
+        .Picker-Cancel-Status {
+            width: 270px;
+            margin-left: -42px;
+        }
+
+        .Title {
+            font-size: 22px;
+        }
+
+        .Status-Icon {
+            margin-left: 0px;
+        }
+
+        .Status-Line {
+            margin-left: 9px;
+        }
+
+        .Status-Cancel-Icon {
+            margin-left: 0px;
+        }
+
+        .Status-Cancel-Line {
+            margin-left: 9px;
+        }
+
+        .Order-Status {
+            font-size: 16px;
+        }
+
+        .Order-Cancel-Status {
+            font-size: 16px;
+        }
+    }
+</style>
+
+

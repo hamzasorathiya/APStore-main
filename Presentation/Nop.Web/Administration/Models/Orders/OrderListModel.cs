@@ -63,9 +63,9 @@ namespace Nop.Admin.Models.Orders
         [AllowHtml]
         public string BillingEmail { get; set; }
 
-        [NopResourceDisplayName("Admin.Orders.List.BillingLastName")]
+        [NopResourceDisplayName("Admin.Orders.List.BillingFirstName")]
         [AllowHtml]
-        public string BillingLastName { get; set; }
+        public string BillingFirstName { get; set; }
 
         [NopResourceDisplayName("Admin.Orders.List.BillingCountry")]
         public int BillingCountryId { get; set; }

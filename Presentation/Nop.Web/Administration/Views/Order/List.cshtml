@@ -130,8 +130,7 @@
             <div class="btn-group">
                 <button type="button" id="delete-selected-order" class="btn bg-red">
                     <i class="fa fa-trash-o"></i>
-                    @T("Admin.Sales.Orders.Delete.Selected")
-                    <h1>moin juneja</h1>
+                    @T("Admin.Sales.Orders.Delete.Selected")                    
                 </button>
             </div>
         </div>
@@ -256,10 +255,10 @@
                                 </div>
                                 <div class="form-group">
                                     <div class="col-md-4">
-                                        @Html.NopLabelFor(model => model.BillingLastName)
+                                        @Html.NopLabelFor(model => model.BillingFirstName)
                                     </div>
                                     <div class="col-md-8">
-                                        @Html.NopEditorFor(model => model.BillingLastName)
+                                        @Html.NopEditorFor(model => model.BillingFirstName)
                                     </div>
                                 </div>
                                 <div class="form-group" @(Model.AvailableCountries.SelectionIsNotPossible() ? Html.Raw("style=\"display:none\"") : null)>
@@ -566,7 +565,7 @@
                                 });
 
                                 $("".concat("#@Html.FieldIdFor(model => model.BillingEmail),",
-                                    "#@Html.FieldIdFor(model => model.BillingLastName),",
+                                    "#@Html.FieldIdFor(model => model.BillingFirstName),",
                                     "#@Html.FieldIdFor(model => model.OrderNotes)")).keydown(function (event) {
                                         if (event.keyCode === 13) {
                                             $("#search-orders").click();
@@ -647,7 +646,7 @@
                                     VendorId: $('#@Html.FieldIdFor(model => model.VendorId)').val(),
                                     WarehouseId: $('#@Html.FieldIdFor(model => model.WarehouseId)').val(),
                                     BillingEmail: $('#@Html.FieldIdFor(model => model.BillingEmail)').val(),
-                                    BillingLastName: $('#@Html.FieldIdFor(model => model.BillingLastName)').val(),
+                                    BillingFirstName: $('#@Html.FieldIdFor(model => model.BillingFirstName)').val(),
                                     BillingCountryId: $('#@Html.FieldIdFor(model => model.BillingCountryId)').val(),
                                     PaymentMethodSystemName: $('#@Html.FieldIdFor(model => model.PaymentMethodSystemName)').val(),
                                     ProductId: $('#@Html.FieldIdFor(model => model.ProductId)').val(),

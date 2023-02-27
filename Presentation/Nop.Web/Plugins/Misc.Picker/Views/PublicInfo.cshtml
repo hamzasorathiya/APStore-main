@@ -1,0 +1,114 @@
+﻿@model Nop.Plugin.Misc.Picker.Models.TrackingInformation
+@{
+    Layout = "";
+}
+
+<div class="TrackingId">
+    <h3 class="Popup-heading"><b><i>Track Your Order</i></b></h3>
+    <br />
+    <br />
+
+    @foreach (var item in Model.TrackingNumber)
+    {
+        <span id="ShippingDetails" onclick="getTrackingInformation('@item')" data-target="#ShippingPopUp">Tracking Number - <b>@item</b> <br /><br /></span>
+    }
+</div>
+
+<div class="modal cart-popup-wrapper" id="ShippingPopUp" style="display:none">
+
+</div>
+
+<script>
+    function getTrackingInformation(TrackingId) {
+        var id = TrackingId;
+        $.ajax({
+            type: "POST",
+            url: "@(Url.Action("Trackorderonpicker", "MiscPicker"))",
+            data: { tracking_id: id },
+            dataType: "html",            
+            success: function (data) {            
+                $('#ShippingPopUp').show();
+                $("#ShippingPopUp").html(data);
+            },
+            error: function (error) {
+                alert("An error has occured!!!" + error);
+            }
+        });
+    }
+</script>
+
+
+<style>
+    /*shipping tracking style to desktop device*/
+    .TrackingId {
+        width: 400px;
+        margin-left: 370px;
+        border: 1px black ridge;
+        margin-bottom: 20px;
+    }
+
+    #ShippingDetails {
+        margin-left: 70px;
+    }
+
+    .Popup-heading {
+        margin-top: 15px;
+        margin-bottom: -15px;
+        text-align: center;
+    }
+
+
+
+    /*shipping tracking style to mobile responsive device*/
+    @@media (min-width:992px) and (max-width:1199px) {
+        .TrackingId {
+            margin-left: 275px;
+        }
+    }
+
+
+    @@media (min-width:768px) and (max-width: 991px) {
+        .TrackingId {
+            margin-left: 165px;
+        }
+    }
+
+
+    @@media (max-width:767px) {
+        .TrackingId {
+            margin-left: 130px;
+        }
+    }
+
+
+    @@media (max-width:640px) {
+        .TrackingId {
+            margin-left: 60px;
+        }
+    }
+
+
+    @@media (max-width:480px) {
+        .TrackingId {
+            margin-left: 15px;
+            width: 350px;
+        }
+
+        #ShippingDetails {
+            margin-left: 50px;
+        }
+    }
+
+
+    @@media (max-width:360px) {
+        .TrackingId {
+            margin-left: 15px;
+            width: 300px;
+        }
+
+        #ShippingDetails {
+            margin-left: 45px;
+            font-size: 12px;
+        }
+    }
+</style>

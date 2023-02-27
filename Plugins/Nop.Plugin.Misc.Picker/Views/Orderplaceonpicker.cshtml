@@ -1,0 +1,198 @@
+﻿@model Nop.Admin.Models.Orders.OrderModel
+
+@{
+    Layout = "";
+}
+
+<div class="picker-order">
+    <button type="button" class="btn btn-primary" id="OrderPlace" onclick="OrderId(@Model.Id)">
+        @T("Admin.Common.PlaceOrderOnPicker")
+    </button>
+    <button type="button" class="btn bg-red" id="OrderCancel" onclick="OrderNumber(@Model.Id)">
+        @T("Admin.Common.CancelOrderOnPicker")
+    </button>
+</div>
+
+
+<div class="picker-bulk-order">
+    <button type="button" class="btn btn-primary" id="BulkOrderPlace">
+        @T("Admin.Common.PlaceBulkOrderOnPicker")
+    </button>
+</div>
+
+<script>
+    function OrderId(orderid) {
+        var Ordernumber = orderid;
+        $.ajax({
+            type: "POST",
+            url: "@(Url.Action("Placeorderonpicker", "MiscPicker"))",
+            dataType: "json",
+            data: { orderId: Ordernumber },
+            success: function (data) {
+                var item;
+                for(item in data){
+                    $.ajax({
+                        method: "POST",
+                        url: "https://pickrr.com/api/place-order/",
+                        contentType: 'application/json',
+                        data: JSON.stringify(data[item]),
+                        success: function (response) {
+                            var apiresponce = response;
+                            $.ajax({
+                                type: "POST",
+                                url: "/MiscPicker/Getplaceorderapiresponse",
+                                data: { Apiresponse: JSON.stringify(apiresponce), orderId: Ordernumber },
+                                error: function (error) {
+                                    alert("An error has occured !!");
+                                }
+                            });
+                        },
+                        error: function (error) {
+                            alert("An error has occured !!" + error);
+                        }
+                    });
+                };
+                alert("Order is successfully placed on pickrr !!");
+            },
+            error: function (error) {
+                alert("An error has occured !!" + error);
+            }
+        });
+    };
+
+    function OrderNumber(ordernumber) {
+        var Ordernumber = ordernumber;
+        $.ajax({
+            type: "POST",
+            url: "@(Url.Action("Cancelorderonpicker", "MiscPicker"))",
+            dataType: "json",
+            data: { ordernumber: Ordernumber },
+            success: function (data) {
+                var item;
+                for(item in data){
+                    $.ajax({
+                        method: "POST",
+                        url: "https://pickrr.com/api/order-cancellation/",
+                        contentType: 'application/json',
+                        data: JSON.stringify(data[item]),                        
+                        error: function (error) {
+                            alert("An error has occured !!" + error);
+                        }
+                    });
+                };
+                alert("Order is successfully cancelled on pickrr !!");
+            },
+            error: function (error) {
+                alert("An error has occured !!" + error);
+            }
+        });
+    };
+
+    if (window.location.href.toLowerCase().indexOf("admin/order/edit") != -1) {
+        $(".picker-order").show();
+    }
+    else {
+        $(".picker-order").hide();
+    }
+</script>
+
+<script>
+
+    //Order Place On Pickrr selected
+
+    var selectedIds = [];
+    $('.picker-bulk-order').click(function (e) {
+        e.preventDefault();
+        debugger;
+        var postData = {
+            selectedIds: selectedIds
+        };
+        if (postData.selectedIds.length == 0) {
+            alert("Please select checkboxes !!");
+        }        
+        addAntiForgeryToken(postData);
+
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "@(Url.Action("Placeorderonpickerselected", "MiscPicker"))",
+            data: postData,
+            success: function (data) {                
+                //reload grid
+                var grid = $('#orders-grid').data('kendoGrid');
+                grid.dataSource.read();
+                var item;
+                for (item in data) {
+                    $.ajax({
+                        method: "POST",
+                        url: "https://pickrr.com/api/place-order/",
+                        contentType: 'application/json',
+                        async: false,
+                        data: JSON.stringify(data[item]),
+                        success: function (response) {
+                            var apiresponce = response;
+                            $.ajax({
+                                type: "POST",
+                                url: "/MiscPicker/Getplacebulkorderapiresponse",
+                                data: { Apiresponse: JSON.stringify(apiresponce), orderId: JSON.stringify(data[item].Originalorderid) },
+                                error: function (error) {
+                                    alert("An error has occured !!");
+                                }
+                            });
+                        },
+                        error: function (error) {
+                            alert("An error has occured !!" + error);
+                        }
+                    });
+                };
+                alert("Bulk order is successfully placed on pickrr !!");
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                alert(thrownError);
+            },
+            traditional: true
+        });
+        return false;
+    });
+
+    if (window.location.href.toLowerCase().indexOf("admin/order/list") != -1) {
+        $(".picker-bulk-order").show();
+    }
+    else {
+        $(".picker-bulk-order").hide();
+    }
+</script>
+
+
+<style>
+    /*PlaceOrderOnPicker button style in desktop*/
+    .picker-order {
+        background-color: #ECF0F1;
+        height: 40px;
+        width: auto;
+    }
+
+    #OrderPlace {
+        float: right;
+        margin-right: 15px;
+        margin-top: 10px;
+    }
+
+    #OrderCancel {
+        float: right;
+        margin-right: 15px;
+        margin-top: 10px;
+    }
+    
+    .picker-bulk-order {
+        background-color: #ECF0F1;
+        height: 40px;
+        width: auto;
+    }
+
+    #BulkOrderPlace {
+        float: right;
+        margin-right: 15px;
+        margin-top: 10px;
+    }
+</style>
